@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Details - Compliance AI</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <a class="back-link" href="/">← Back to Dashboard</a>
+
+    <header>
+        <h1>Document Analysis</h1>
+        <p>AI-powered compliance insights</p>
+    </header>
+
+    <section class="document-card">
+
+        <h2>{{ document.filename }}</h2>
+
+        <div class="info-grid">
+
+            <div class="info-box">
+                <span>Language</span>
+                <strong>{{ document.language }}</strong>
+            </div>
+
+            <div class="info-box">
+                <span>Document Type</span>
+                <strong>{{ document.document_type }}</strong>
+            </div>
+
+            <div class="info-box">
+                <span>Priority</span>
+                <strong class="priority {{ document.priority|lower }}">
+                    {{ document.priority }}
+                </strong>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="document-card">
+
+        <h2>AI Summary</h2>
+
+        <p class="summary-text">
+            {{ document.summary }}
+        </p>
+
+    </section>
+
+    <section class="document-card">
+
+        <h2>Important Clauses</h2>
+
+        {% if clauses %}
+
+        <div class="clause-list">
+
+            {% for clause in clauses %}
+
+            <div class="clause-item">
+                <span class="item-number">{{ loop.index }}</span>
+                <p>{{ clause }}</p>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <p>No important clauses found.</p>
+
+        {% endif %}
+
+    </section>
+
+    <section class="document-card">
+
+        <h2>Compliance Dates</h2>
+
+        {% if dates %}
+
+        <div class="date-list">
+
+            {% for date in dates %}
+
+            <div class="date-item">
+                <span>date</span>
+                <strong>{{ date }}</strong>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <p>No compliance dates found.</p>
+
+        {% endif %}
+
+    </section>
+
+    <section class="document-card">
+
+        <h2>Compliance Checklist</h2>
+
+        {% if checklist %}
+
+        <div class="checklist">
+
+            {% for item in checklist %}
+
+            <div class="checklist-item">
+                <input type="checkbox" disabled>
+                <span>{{ item }}</span>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <p>No compliance checklist available.</p>
+
+        {% endif %}
+
+    </section>
+
+    <section class="document-card">
+
+        <h2>Document Management</h2>
+
+        <button
+            onclick="deleteDocument({{ document.id }})"
+            class="delete-button"
+        >
+            Delete Document
+        </button>
+
+    </section>
+
+</div>
+
+<script>
+async function deleteDocument(documentId) {
+
+    const confirmed = confirm(
+        "Are you sure you want to delete this document?"
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    const response = await fetch(
+        "/documents/" + documentId,
+        {
+            method: "DELETE"
+        }
+    );
+
+    if (response.ok) {
+        alert("Document deleted successfully.");
+        window.location.href = "/";
+    } else {
+        alert("Unable to delete document.");
+    }
+}
+</script>
+
+</body>
+</html>
+
+

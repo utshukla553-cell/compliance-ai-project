@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compliance AI Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <div class="container">
+
+        <header>
+            <h1>Compliance AI</h1>
+            <p>Multilingual Regulatory Document Intelligence System</p>
+        </header>
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <span>Total Documents</span>
+                <strong>{{ total_documents }}</strong>
+            </div>
+
+            <div class="stat-card">
+                <span>High Priority</span>
+                <strong>{{ high_priority }}</strong>
+            </div>
+
+            <div class="stat-card">
+                <span>Medium Priority</span>
+                <strong>{{ medium_priority }}</strong>
+            </div>
+
+            <div class="stat-card">
+                <span>Low Priority</span>
+                <strong>{{ low_priority }}</strong>
+            </div>
+
+        </section>
+
+        <section class="deadline-card">
+
+            <div class="section-header">
+                <h2>Compliance Deadlines</h2>
+                <span>{{ deadlines|length }} deadline(s)</span>
+            </div>
+
+            {% if deadlines %}
+
+                <div class="deadline-list">
+
+                    {% for deadline in deadlines %}
+
+                    <div class="deadline-item">
+
+                        <div>
+                            <strong>{{ deadline.date }}</strong>
+                            <p>{{ deadline.filename }}</p>
+                        </div>
+
+                        <span class="priority {{ deadline.priority|lower }}">
+                            {{ deadline.priority }}
+                        </span>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <p>No compliance deadlines found.</p>
+
+            {% endif %}
+
+        </section>
+
+        <section class="deadline-card">
+
+            <div class="section-header">
+                <h2>Compliance Checklist Overview</h2>
+                <span>{{ checklist_overview|length }} document(s)</span>
+            </div>
+
+            {% if checklist_overview %}
+
+                <div class="deadline-list">
+
+                    {% for item in checklist_overview %}
+
+                    <div class="deadline-item">
+
+                        <div>
+                            <strong>{{ item.count }} checklist task(s)</strong>
+                            <p>{{ item.filename }}</p>
+                        </div>
+
+                        <span class="priority {{ item.priority|lower }}">
+                            {{ item.priority }}
+                        </span>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <p>No compliance checklist available.</p>
+
+            {% endif %}
+
+        </section>
+
+        <section class="upload-card">
+            <h2>Upload Compliance Document</h2>
+
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <input
+                    type="file"
+                    name="file"
+                    accept=".pdf,.png,.jpg,.jpeg,.tiff,.bmp"
+                    required
+                >
+
+                <button type="submit">Upload & Analyze</button>
+            </form>
+
+            <p class="help-text">
+                Supported files: PDF and images
+            </p>
+        </section>
+
+        <section class="documents">
+            <div class="section-header">
+                <h2>Analyzed Documents</h2>
+                <span>{{ documents|length }} document(s)</span>
+            </div>
+
+            {% if documents %}
+
+                {% for document in documents %}
+                <div class="document-card">
+
+                    <div class="document-info">
+                        <h3>{{ document.filename }}</h3>
+
+                        <p>
+                            <strong>Language:</strong>
+                            {{ document.language }}
+                        </p>
+
+                        <p>
+                            <strong>Type:</strong>
+                            {{ document.document_type }}
+                        </p>
+
+                        <p>
+                            <strong>Priority:</strong>
+                            <span class="priority {{ document.priority|lower }}">
+                                {{ document.priority }}
+                            </span>
+                        </p>
+
+                        <p>
+                            <strong>Summary:</strong>
+                            {{ document.summary }}
+                        </p>
+                    </div>
+
+                    <div class="actions">
+                        <a href="/documents/{{ document.id }}">
+                            View Details
+                        </a>
+                    </div>
+
+                </div>
+                {% endfor %}
+
+            {% else %}
+
+                <div class="empty-state">
+                    <p>No documents analyzed yet.</p>
+                </div>
+
+            {% endif %}
+
+        </section>
+
+    </div>
+</body>
+</html>
+
+
+

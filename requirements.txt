@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+python-multipart
+pandas
+pymupdf
+pdfplumber
+pytesseract
+Pillow
+google-genai
+python-dotenv
+langdetect
+jinja2
